@@ -598,13 +598,15 @@ func (p *PartitionTable) updateHwmStats() {
 }
 
 func (p *PartitionTable) storeEvent(key string, value []byte, offset int64, headers []*sarama.RecordHeader) error {
-	p.log.Debugf(
-		"store event = topic=%s, partition=%v, key=%s, offset=%v",
-		p.topic,
-		p.partition,
-		key,
-		offset,
-	)
+	if p.topic == "anomalydetector-nodata-rules-table" {
+		p.log.Debugf(
+			"store event = topic=%s, partition=%v, key=%s, offset=%v",
+			p.topic,
+			p.partition,
+			key,
+			offset,
+		)
+	}
 
 	err := p.st.Update(&DefaultUpdateContext{
 		topic:     p.st.topic,
