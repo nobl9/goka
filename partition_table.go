@@ -8,6 +8,7 @@ import (
 
 	"github.com/Shopify/sarama"
 	"github.com/hashicorp/go-multierror"
+
 	"github.com/lovoo/goka/multierr"
 	"github.com/lovoo/goka/storage"
 )
@@ -460,6 +461,17 @@ func (p *PartitionTable) loadMessages(ctx context.Context, cons sarama.Partition
 				continue
 			}
 
+			if msg.Topic == "anomalydetector-nodata-rules-table" {
+				p.log.Debugf(
+					"load messages = topic=%s, partition=%v, key=%s, offset=%v, timestamp=%v",
+					msg.Topic,
+					msg.Partition,
+					string(msg.Key),
+					msg.Offset,
+					msg.Timestamp,
+				)
+			}
+
 			if p.state.IsState(State(PartitionRunning)) && stopAfterCatchup {
 				// TODO: should we really ignore the message?
 				// Shouldn't we instead break here to avoid losing messages or fail or just consume it?
@@ -586,6 +598,14 @@ func (p *PartitionTable) updateHwmStats() {
 }
 
 func (p *PartitionTable) storeEvent(key string, value []byte, offset int64, headers []*sarama.RecordHeader) error {
+	p.log.Debugf(
+		"store event = topic=%s, partition=%v, key=%s, offset=%v",
+		p.topic,
+		p.partition,
+		key,
+		offset,
+	)
+
 	err := p.st.Update(&DefaultUpdateContext{
 		topic:     p.st.topic,
 		partition: p.st.partition,

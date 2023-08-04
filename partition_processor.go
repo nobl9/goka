@@ -10,6 +10,7 @@ import (
 
 	"github.com/Shopify/sarama"
 	"github.com/hashicorp/go-multierror"
+
 	"github.com/lovoo/goka/multierr"
 )
 
@@ -639,6 +640,9 @@ func (pp *PartitionProcessor) processMessage(ctx context.Context, wg *sync.WaitG
 		m   interface{}
 		err error
 	)
+
+	pp.log.Debugf("processing message topic=%s offset=%v partition=%v key=%s",
+		msg.topic, msg.offset, msg.partition, msg.key)
 
 	// decide whether to decode or ignore message
 	switch {
