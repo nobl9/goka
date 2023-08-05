@@ -641,8 +641,8 @@ func (pp *PartitionProcessor) processMessage(ctx context.Context, wg *sync.WaitG
 		err error
 	)
 
-	pp.log.Debugf("processing message topic=%s offset=%v partition=%v key=%s",
-		msg.topic, msg.offset, msg.partition, msg.key)
+	//pp.log.Debugf("processing message topic=%s offset=%v partition=%v key=%s",
+	//	msg.topic, msg.offset, msg.partition, msg.key)
 
 	// decide whether to decode or ignore message
 	switch {

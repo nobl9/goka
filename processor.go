@@ -823,16 +823,16 @@ func (g *Processor) ConsumeClaim(session sarama.ConsumerGroupSession, claim sara
 					headers:   msg.Headers,
 					value:     msg.Value,
 				}
-				if msg.Topic == "anomalydetector-nodata-rules" {
-					g.log.Debugf(
-						"consume claim - topic=%s, partition=%v, key=%s, offset=%v, timestamp=%v, value=%v",
-						msg.Topic,
-						msg.Partition,
-						string(msg.Key),
-						msg.Offset,
-						msg.Timestamp,
-					)
-				}
+				//if msg.Topic == "anomalydetector-nodata-rules" {
+				//	g.log.Debugf(
+				//		"consume claim - topic=%s, partition=%v, key=%s, offset=%v, timestamp=%v, value=%v",
+				//		msg.Topic,
+				//		msg.Partition,
+				//		string(msg.Key),
+				//		msg.Offset,
+				//		msg.Timestamp,
+				//	)
+				//}
 				return m
 			}():
 			case <-stopping:
