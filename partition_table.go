@@ -446,32 +446,32 @@ func (p *PartitionTable) loadMessages(ctx context.Context, cons sarama.Partition
 		case err, ok := <-errors:
 			if !ok {
 				p.log.Debugf(
-					"load messages exit with err !ok = topic=%s, partition=%v, key=%s, offset=%v, timestamp=%v",
-					msg.Topic,
-					msg.Partition,
-					string(msg.Key),
-					msg.Offset,
-					msg.Timestamp,
+					"load messages exit with 'err, !ok' = topic=%s, partition=%v",
+					p.topic,
+					p.partition,
 				)
 				return nil
 			}
 			if err != nil {
 				p.log.Debugf(
-					"load messages exit with err = topic=%s, partition=%v, key=%s, offset=%v, timestamp=%v",
-					msg.Topic,
-					msg.Partition,
-					string(msg.Key),
-					msg.Offset,
-					msg.Timestamp,
+					"load messages exit with 'err != nil' = topic=%s, partition=%v",
+					p.topic,
+					p.partition,
 				)
+				p.log.Debugf("load messages exit with error=" + err.Error())
 				return err
 			}
 		case msg, ok := <-messages:
 			if !ok {
 				p.log.Debugf(
-					"load messages exit with msg !ok = topic=%s, partition=%v, key=%s, offset=%v, timestamp=%v",
-					msg.Topic,
-					msg.Partition,
+					"load messages exit with msg !ok (1) = topic=%s, partition=%v",
+					p.topic,
+					p.partition,
+				)
+				p.log.Debugf(
+					"load messages exit with msg !ok (2) = topic=%s, partition=%v, key=%s, offset=%v, timestamp=%v",
+					p.topic,
+					p.partition,
 					string(msg.Key),
 					msg.Offset,
 					msg.Timestamp,
@@ -484,11 +484,8 @@ func (p *PartitionTable) loadMessages(ctx context.Context, cons sarama.Partition
 			if msg == nil {
 				p.log.Debugf(
 					"load messages continue msg == nil = topic=%s, partition=%v, key=%s, offset=%v, timestamp=%v",
-					msg.Topic,
-					msg.Partition,
-					string(msg.Key),
-					msg.Offset,
-					msg.Timestamp,
+					p.topic,
+					p.partition,
 				)
 				continue
 			}
