@@ -461,7 +461,7 @@ func (p *PartitionTable) loadMessages(ctx context.Context, cons sarama.Partition
 				continue
 			}
 
-			if msg.Topic == "anomalydetector-nodata-rules-table" {
+			if msg.Topic == "anomalydetector-nodata-rules" {
 				p.log.Debugf(
 					"load messages = topic=%s, partition=%v, key=%s, offset=%v, timestamp=%v",
 					msg.Topic,
@@ -598,7 +598,7 @@ func (p *PartitionTable) updateHwmStats() {
 }
 
 func (p *PartitionTable) storeEvent(key string, value []byte, offset int64, headers []*sarama.RecordHeader) error {
-	if p.topic == "anomalydetector-nodata-rules-table" {
+	if p.topic == "anomalydetector-nodata-rules" {
 		p.log.Debugf(
 			"store event = topic=%s, partition=%v, key=%s, offset=%v",
 			p.topic,
