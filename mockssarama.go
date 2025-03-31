@@ -245,6 +245,20 @@ func (mr *MockClientMockRecorder) OfflineReplicas(arg0, arg1 any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "OfflineReplicas", reflect.TypeOf((*MockClient)(nil).OfflineReplicas), arg0, arg1)
 }
 
+// PartitionNotReadable mocks base method.
+func (m *MockClient) PartitionNotReadable(arg0 string, arg1 int32) bool {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "PartitionNotReadable", arg0, arg1)
+	ret0, _ := ret[0].(bool)
+	return ret0
+}
+
+// PartitionNotReadable indicates an expected call of PartitionNotReadable.
+func (mr *MockClientMockRecorder) PartitionNotReadable(arg0, arg1 any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PartitionNotReadable", reflect.TypeOf((*MockClient)(nil).PartitionNotReadable), arg0, arg1)
+}
+
 // Partitions mocks base method.
 func (m *MockClient) Partitions(arg0 string) ([]int32, error) {
 	m.ctrl.T.Helper()
@@ -487,6 +501,21 @@ func (m *MockClusterAdmin) Controller() (*sarama.Broker, error) {
 func (mr *MockClusterAdminMockRecorder) Controller() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Controller", reflect.TypeOf((*MockClusterAdmin)(nil).Controller))
+}
+
+// Coordinator mocks base method.
+func (m *MockClusterAdmin) Coordinator(arg0 string) (*sarama.Broker, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Coordinator", arg0)
+	ret0, _ := ret[0].(*sarama.Broker)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Coordinator indicates an expected call of Coordinator.
+func (mr *MockClusterAdminMockRecorder) Coordinator(arg0 any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Coordinator", reflect.TypeOf((*MockClusterAdmin)(nil).Coordinator), arg0)
 }
 
 // CreateACL mocks base method.
@@ -735,6 +764,21 @@ func (m *MockClusterAdmin) DescribeUserScramCredentials(arg0 []string) ([]*saram
 func (mr *MockClusterAdminMockRecorder) DescribeUserScramCredentials(arg0 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DescribeUserScramCredentials", reflect.TypeOf((*MockClusterAdmin)(nil).DescribeUserScramCredentials), arg0)
+}
+
+// ElectLeaders mocks base method.
+func (m *MockClusterAdmin) ElectLeaders(arg0 sarama.ElectionType, arg1 map[string][]int32) (map[string]map[int32]*sarama.PartitionResult, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "ElectLeaders", arg0, arg1)
+	ret0, _ := ret[0].(map[string]map[int32]*sarama.PartitionResult)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// ElectLeaders indicates an expected call of ElectLeaders.
+func (mr *MockClusterAdminMockRecorder) ElectLeaders(arg0, arg1 any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ElectLeaders", reflect.TypeOf((*MockClusterAdmin)(nil).ElectLeaders), arg0, arg1)
 }
 
 // IncrementalAlterConfig mocks base method.
