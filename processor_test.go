@@ -377,6 +377,31 @@ func TestProcessor_Run(t *testing.T) {
 	})
 }
 
+func TestProcessor_LookupViewsReconnect(t *testing.T) {
+	ctrl, bm := createMockBuilder(t)
+	defer ctrl.Finish()
+
+	bm.tmgr.EXPECT().Partitions(gomock.Any()).Return([]int32{0}, nil).AnyTimes()
+	bm.tmgr.EXPECT().Close().Return(nil).AnyTimes()
+
+	groupBuilder, _ := createTestConsumerGroupBuilder(t)
+	consBuilder, _ := createTestConsumerBuilder(t)
+
+	graph := DefineGroup("test",
+		Input("input", new(codec.Int64), accumulate),
+		Lookup("lookup-table", new(codec.Int64)),
+	)
+
+	proc, err := NewProcessor([]string{"localhost:9092"}, graph,
+		bm.createProcessorOptions(consBuilder, groupBuilder)...,
+	)
+	require.NoError(t, err)
+
+	view, ok := proc.lookupTables["lookup-table"]
+	require.True(t, ok)
+	require.True(t, view.opts.autoreconnect)
+}
+
 func TestProcessor_StateReader(t *testing.T) {
 	state := NewSignal(ProcStateSetup, ProcStateRunning)
 	state.SetState(ProcStateRunning)
