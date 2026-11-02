@@ -112,6 +112,7 @@ func NewProcessor(brokers []string, gg *GroupGraph, options ...ProcessorOption) 
 			WithViewTopicManagerBuilder(opts.builders.topicmgr),
 			WithViewStorageBuilder(opts.builders.storage),
 			WithViewConsumerSaramaBuilder(opts.builders.consumerSarama),
+			WithViewAutoReconnect(),
 		)
 		if err != nil {
 			return nil, fmt.Errorf("error creating view: %v", err)
