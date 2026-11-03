@@ -76,7 +76,6 @@ func (cg *consumerGroup) Consume(ctx context.Context, topics []string, handler s
 	}
 	errg, innerCtx := multierr.NewErrGroup(session.ctx)
 	for _, claim := range session.claims {
-		claim := claim
 		errg.Go(func() error {
 			select {
 			case <-innerCtx.Done():
@@ -323,11 +322,12 @@ func (cgs *cgSession) pushMessageToClaim(claim *cgClaim, msg *message) {
 
 	select {
 	case claim.msgs <- &sarama.ConsumerMessage{
-		Headers: msg.headers.ToSaramaPtr(),
-		Key:     []byte(msg.key),
-		Value:   msg.value,
-		Topic:   claim.Topic(),
-		Offset:  msg.offset,
+		Headers:   msg.headers.ToSaramaPtr(),
+		Key:       []byte(msg.key),
+		Value:     msg.value,
+		Topic:     claim.Topic(),
+		Offset:    msg.offset,
+		Timestamp: msg.time,
 	}:
 	// context closed already, so don't push as no consumer will be listening
 	case <-cgs.ctx.Done():

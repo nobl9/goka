@@ -2,6 +2,7 @@ package tester
 
 import (
 	"sync"
+	"time"
 
 	"github.com/lovoo/goka"
 )
@@ -11,6 +12,7 @@ type message struct {
 	key     string
 	value   []byte
 	headers goka.Headers
+	time    time.Time
 }
 
 type queue struct {
@@ -35,7 +37,7 @@ func (q *queue) Hwm() int64 {
 	return hwm
 }
 
-func (q *queue) push(key string, value []byte, headers goka.Headers) int64 {
+func (q *queue) push(key string, value []byte, time time.Time, headers goka.Headers) int64 {
 	q.Lock()
 	defer q.Unlock()
 	offset := q.hwm
@@ -44,6 +46,7 @@ func (q *queue) push(key string, value []byte, headers goka.Headers) int64 {
 		key:     key,
 		value:   value,
 		headers: headers,
+		time:    time,
 	})
 	q.hwm++
 	return offset
@@ -88,7 +91,7 @@ func newQueueTracker(tester *Tester, t T, topic string) *QueueTracker {
 // Next returns the next message since the last time this
 // function was called (or MoveToEnd)
 // It uses the known codec for the topic to decode the message
-func (mt *QueueTracker) Next() (string, interface{}, bool) {
+func (mt *QueueTracker) Next() (string, any, bool) {
 	_, key, msg, hasNext := mt.NextWithHeaders()
 	return key, msg, hasNext
 }
@@ -96,7 +99,7 @@ func (mt *QueueTracker) Next() (string, interface{}, bool) {
 // NextWithHeaders returns the next message since the last time this
 // function was called (or MoveToEnd).  This includes headers
 // It uses the known codec for the topic to decode the message
-func (mt *QueueTracker) NextWithHeaders() (goka.Headers, string, interface{}, bool) {
+func (mt *QueueTracker) NextWithHeaders() (goka.Headers, string, any, bool) {
 	headers, key, msgRaw, hasNext := mt.NextRawWithHeaders()
 
 	if !hasNext {
