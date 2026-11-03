@@ -1,6 +1,6 @@
 module github.com/lovoo/goka
 
-go 1.26.5
+go 1.26.0
 
 require (
 	github.com/IBM/sarama v1.46.3
