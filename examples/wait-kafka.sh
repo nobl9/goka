@@ -5,11 +5,13 @@
 # $1: expects the hostname from docker compose and port in array form: localhost:9092,localhost:9093
 #
 
+DOCKER_BIN=$(command -v docker 2>/dev/null || command -v podman 2>/dev/null || echo "docker")
+
 wait_for_kafka() {
     IFS=','; for i in $1; do
         host="$(echo "$i" | cut -d':' -f1)"
         port="$(echo "$i" | cut -d':' -f2)"
-        while ! docker exec -i ${host} sh -c "kafka-topics --bootstrap-server localhost:${port} --list"; do
+        while ! ${DOCKER_BIN} exec -i ${host} sh -c "kafka-topics --bootstrap-server localhost:${port} --list"; do
             echo "Waiting for kafka '$i' to list topics..."
             sleep 5
         done
